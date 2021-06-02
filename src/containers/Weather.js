@@ -1,21 +1,22 @@
-import Card from "../components/UI/Card/Card";
+import { useState } from "react";
+import Days from "../components/Days/Days";
 
 const Weather = (props) => {
+  const [dailyWeatherData, setDailyWeatherData] = useState(null);
+
   const loadData = async ({ latitude, longitude }) => {
     const res = await fetch(
-      `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,current,minutel,alertsy&appid=beee642417472dda459c37521388b2e1`
+      `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,current,minutely,alertsy&appid=beee642417472dda459c37521388b2e1`
     );
 
     if (!res.ok) return;
 
-    const data = await res.json();
+    const { daily } = await res.json();
 
-    console.log(data);
+    setDailyWeatherData(daily);
   };
 
   const successLocation = (pos) => {
-    // const { latitude: lat, longitude: lon } = pos.coords;
-
     loadData(pos.coords);
   };
 
@@ -23,11 +24,17 @@ const Weather = (props) => {
     console.error("Not found 404");
   };
 
-  navigator.geolocation.getCurrentPosition(successLocation, errorLocation);
+  if (!dailyWeatherData) {
+    navigator.geolocation.getCurrentPosition(successLocation, errorLocation);
+  }
 
   return (
     <div>
-      <Card>Day 1</Card>
+      {dailyWeatherData ? (
+        <Days dailyWeatherData={dailyWeatherData} />
+      ) : (
+        "Loading ...."
+      )}
     </div>
   );
 };
