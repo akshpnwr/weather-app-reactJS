@@ -1,5 +1,11 @@
+import Header from "./components/Header/Header";
+
 function App() {
-  return <h1>Weather app</h1>;
+  return (
+    <div>
+      <Header />
+    </div>
+  );
 }
 
 export default App;
