@@ -3,14 +3,17 @@ import Day from "./Day/Day";
 import classes from "./Days.module.css";
 
 const Days = (props) => {
+  console.log(props);
+
   const days = (
     <Fragment>
-      {props.dailyWeatherData.map((weatherData) => {
+      {props.dailyWeatherData.slice(0, 7).map((weatherData) => {
         return (
           <Day
             key={weatherData.dt}
             date={weatherData.dt}
             weather={weatherData.weather}
+            temp={weatherData.temp}
           />
         );
       })}
